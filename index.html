@@ -1,30 +1,170 @@
-LIVE WEATHER
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Academic Mini Project - Real-Time Weather Information & Forecast System">
+  <title>WeatherSense • Weather Information Website</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-Weather Information
-Check current weather and forecasts for any city.
+  <!-- Top Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="#" class="brand">🌤️ <span>WeatherSense</span></a>
+      <div class="nav-links">
+        <a href="#parameters" class="nav-link">Metrics</a>
+        <a href="#forecast-tool" class="nav-link active-pill">Forecast</a>
+        <button id="unitBtn" class="unit-btn" type="button" title="Switch Temperature Unit">°C</button>
+      </div>
+    </div>
+  </nav>
 
-°C
-Enter city name (e.g. Chennai)
- Search ⌖
-Search for a city to see its weather.
+  <!-- Hero Banner -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="badge">ACADEMIC MINI PROJECT • DEPT OF IT</div>
+      <h1>Real-Time Weather Information System</h1>
+      <p class="hero-desc">
+        Track live atmospheric conditions, analyze hourly and 7-day meteorological forecasts,
+        and manage recent location lookups with ease. Powered by Open-Meteo REST API.
+      </p>
+      <div class="hero-actions">
+        <a href="#forecast-tool" class="btn-solid">Check Weather ↓</a>
+        <a href="#parameters" class="btn-outline">View Weather Metrics</a>
+      </div>
+    </div>
+  </header>
 
-—
+  <!-- Section 1: Weather Parameters Overview (Like Slab Cards) -->
+  <section id="parameters" class="section">
+    <div class="container">
+      <p class="section-eyebrow">METEOROLOGICAL PARAMETERS</p>
+      <h2 class="section-title">Monitored Atmospheric Indicators</h2>
+      <p class="section-sub">Live data points fetched and processed dynamically via Open-Meteo Geocoding &amp; Forecast APIs.</p>
 
-Current weather
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <span class="metric-tag">INDICATOR 1</span>
+          <h3>Thermal Comfort</h3>
+          <p class="metric-highlight">°C / °F <span>Dual Unit</span></p>
+          <p class="metric-desc">Ambient air temperature and apparent feels-like index</p>
+        </div>
 
-☀️
---°
+        <div class="metric-card">
+          <span class="metric-tag">INDICATOR 2</span>
+          <h3>Moisture &amp; Wind</h3>
+          <p class="metric-highlight">% &amp; km/h <span>Real-Time</span></p>
+          <p class="metric-desc">Relative humidity percentage and surface wind speed</p>
+        </div>
 
-—
+        <div class="metric-card">
+          <span class="metric-tag">INDICATOR 3</span>
+          <h3>Pressure &amp; UV</h3>
+          <p class="metric-highlight">hPa &amp; UV <span>Index</span></p>
+          <p class="metric-desc">Mean sea-level pressure, UV radiation, sunrise &amp; sunset</p>
+        </div>
+      </div>
+      <p class="section-note">* Note: Live weather data is sourced from Open-Meteo meteorological models with automatic day/night adaptation.</p>
+    </div>
+  </section>
 
-Feels like --
+  <!-- Section 2: Weather Search & Live Results (Like Calculation Form) -->
+  <section id="forecast-tool" class="section section-alt">
+    <div class="container">
+      <p class="section-eyebrow">CITY SEARCH &amp; LIVE FORECAST</p>
+      <h2 class="section-title">Weather Lookup Dashboard</h2>
+      <p class="section-sub">Enter any city name or use GPS geolocation to generate an instant weather report.</p>
 
-Humidity--
-Wind speed--
-Pressure--
-UV index--
-Sunrise--
-Sunset--
-Next 24 hours
-7-day forecast
-Weather data provided by Open-Meteo.
+      <!-- Search Card -->
+      <div class="panel-card">
+        <h3 class="card-heading">Location &amp; Unit Input</h3>
+        <hr class="divider">
+
+        <form id="searchForm" class="search-form">
+          <div class="input-group">
+            <label for="cityInput">City Name <span class="req">*</span></label>
+            <input id="cityInput" type="search" placeholder="e.g. Trichy, Chennai, London" autocomplete="off" required>
+          </div>
+
+          <div class="form-buttons">
+            <button class="btn-primary" type="submit">Get Weather</button>
+            <button id="locationBtn" class="btn-secondary" type="button" title="Use Current Location">📍 Use My Location</button>
+          </div>
+        </form>
+
+        <p id="status" class="status" role="status">Loading default weather data...</p>
+      </div>
+
+      <!-- Current Weather Result Card -->
+      <div id="currentCard" class="panel-card hidden">
+        <div class="current-header">
+          <div>
+            <span class="result-tag">LIVE REPORT</span>
+            <h3 id="placeName" class="place-title">—</h3>
+            <p id="updatedAt" class="muted-text">Updated just now</p>
+          </div>
+          <div id="weatherIcon" class="weather-emoji" aria-hidden="true">☀️</div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="temp-banner">
+          <div id="temperature" class="big-temp">--°</div>
+          <div>
+            <p id="condition" class="condition-text">—</p>
+            <p class="muted-text">Feels like <strong id="feelsLike">--</strong></p>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-box"><span>Humidity</span><strong id="humidity">--</strong></div>
+          <div class="stat-box"><span>Wind Speed</span><strong id="wind">--</strong></div>
+          <div class="stat-box"><span>Pressure</span><strong id="pressure">--</strong></div>
+          <div class="stat-box"><span>UV Index</span><strong id="uv">--</strong></div>
+          <div class="stat-box"><span>Sunrise</span><strong id="sunrise">--</strong></div>
+          <div class="stat-box"><span>Sunset</span><strong id="sunset">--</strong></div>
+        </div>
+      </div>
+
+      <!-- Next 24 Hours Card -->
+      <div id="hourlyCard" class="panel-card hidden">
+        <h3 class="card-heading">Next 24-Hour Forecast</h3>
+        <hr class="divider">
+        <div id="hourlyForecast" class="hourly-strip"></div>
+      </div>
+
+      <!-- 7-Day Forecast Card -->
+      <div id="dailyCard" class="panel-card hidden">
+        <h3 class="card-heading">7-Day Extended Forecast</h3>
+        <hr class="divider">
+        <div id="dailyForecast" class="daily-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Local Storage / Recent Searches -->
+  <section id="history" class="section">
+    <div class="container">
+      <p class="section-eyebrow">LOCAL STORAGE</p>
+      <h2 class="section-title">Recent City Lookups</h2>
+      <p class="section-sub">Your recently searched cities are saved in browser local storage for one-click access.</p>
+
+      <div class="panel-card history-card">
+        <div id="recentSearches" class="recent-chips"></div>
+        <button id="clearHistoryBtn" class="btn-clear hidden" type="button">Clear History</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p><strong>Weather Information Website</strong> • Dept. of Information Technology, SRM TRP Engineering College</p>
+    <p>Data provided by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo Weather API</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+ </html>
+ 
